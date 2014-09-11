@@ -39,6 +39,7 @@ db
       throw err
     } else {
       http.createServer(app).listen(app.get('port'), function(){
+      	console.log('Prueba git');
         console.log(('Servidor corriendo en ' + app.get('port')).bold)
       })
     }

@@ -2,7 +2,7 @@ var fs        = require('fs')
   , path      = require('path')
   , Sequelize = require('sequelize')
   , lodash    = require('lodash')
-  , sequelize = new Sequelize('database', 'user', 'pass', {
+  , sequelize = new Sequelize('a', 'a', 'a', {
       dialect: "mysql", 
       port:    3306, // 5432 (postgres)
       host:   "localhost"
