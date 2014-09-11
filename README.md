@@ -3,7 +3,7 @@ Meen Skeleton (Mysql - Ember - Express - Node).
 
 ##Descripción
 
-Aplicación de ejemplo con 2 módulos (películas y cines), tanto en el frontend(ember) como en el backend(express) se tiene el mismo modelo de objetos. Estos se comunican mediante una API REST.
+Aplicación de ejemplo con 2 módulos (películas y cines), tanto en el frontend(ember) como en el backend(express) se tiene el mismo modelo. Estos se comunican mediante una API REST.
 
 ##Tecnologías
 
