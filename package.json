@@ -1,0 +1,21 @@
+{
+  "name": "skeleton",
+  "description": "skeleton for making mysql-express-ember-node app",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "body-parser": "^1.7.0",
+    "colors": "^0.6.2",
+    "express": "4.x",
+    "gulp": "^3.8.7",
+    "lodash": "^2.4.1",
+    "mysql": "^2.4.3",
+    "sequelize": "^1.7.10"
+  },
+  "devDependencies": {
+    "gulp-concat": "^2.3.5",
+    "gulp-declare": "^0.3.0",
+    "gulp-handlebars": "^2.2.0",
+    "gulp-wrap": "^0.3.0"
+  }
+}
