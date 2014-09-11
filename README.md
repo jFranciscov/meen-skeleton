@@ -23,9 +23,7 @@ sudo apt-get install nodejs
 ```
   sudo npm install
 ```  
-2.- Configurar conexión a la BD
-2.1.- Abrir archivo /models/index.js
-2.2.- Cambiar parámetros de la conexión
+2.- Configurar conexión a la BD, abrir archivo /models/index.js y cambiar parámetros de la conexión
 ```
   , sequelize = new Sequelize('database', 'user', 'pass', {
 ```  
