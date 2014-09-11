@@ -1,6 +1,21 @@
 Meen Skeleton (Mysql - Ember - Express - Node).
 =============
 
+##Descripción
+
+Aplicación de ejemplo utilizando 
+
+-Mysql (DB)
+-Ember (MVC frontend)
+-Ember data (ORM frontend)
+-Express (MVC backend)
+-Sequelize (ORM backend)
+-Node (Server)
+-Gulp (Task runner)
+-Foundation (UI framework)
+
+
+
 ##Requisitos
 
 
