@@ -9,9 +9,13 @@ var express 		= require('express')
 
 var app = express();
 
+app.set('port', process.env.PORT || 3000);
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')))
-app.set('port', process.env.PORT || 3000);
+app.use(function(err, req, res, next){
+  console.error(err.stack);
+  res.send(500, { message: 'Error del servidor'});
+});
 
 colors.setTheme({
 	error : 'red',
