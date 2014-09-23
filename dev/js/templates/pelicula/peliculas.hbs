@@ -1,0 +1,27 @@
+<div class="row">
+  <div class="large-4 columns">
+		<table>
+		  <thead>
+        <tr>
+			    <td>Películas</td>
+        </tr>
+			</thead>
+      <tbody>
+			{{#each}}
+			<tr>
+				<td>
+          {{#link-to 'pelicula' this}}
+            {{nombre}}
+          {{/link-to}}
+        </td>
+			</tr>
+			{{/each}}
+      </tbody>
+		</table>
+    <hr></hr>
+    {{#link-to 'agregar_pelicula'}}
+      <button class="button">Agregar nueva</button>
+    {{/link-to}}
+  </div>
+    {{outlet}}
+</div>

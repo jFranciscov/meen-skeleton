@@ -10,12 +10,27 @@ var express 		= require('express')
 var app = express();
 
 app.set('port', process.env.PORT || 3000);
+app.set('env', process.env.NODE_ENV || 'development');
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'dist')))
 app.use(function(err, req, res, next){
   console.error(err.stack);
   res.send(500, { message: 'Error del servidor'});
 });
+
+if(app.get('env') == 'development'){
+	console.log('development');
+	app.use(express.static(path.join(__dirname, 'dev')));
+}
+
+if(app.get('env') == 'test'){
+	console.log('test');
+	app.use(express.static(path.join(__dirname, 'test')));
+}
+
+if(app.get('env') == 'production'){
+	console.log('production');
+	app.use(express.static(path.join(__dirname, 'prod')));
+}
 
 colors.setTheme({
 	error : 'red',
@@ -26,6 +41,7 @@ colors.setTheme({
 });
 
 app.get('/api/peliculas',pelicula.select);
+app.get('/api/peliculas/:id',pelicula.selectOne);
 app.post('/api/peliculas',pelicula.insert);
 app.delete('/api/peliculas/:id',pelicula.delete);
 app.put('/api/peliculas/:id',pelicula.update);

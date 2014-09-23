@@ -10,6 +10,16 @@ exports.select = function(req, res){
 		})
 }
 
+exports.selectOne = function(req, res){
+	console.log('=> GET | Obtener pelicula'.bold.get);
+	db.Pelicula
+		.find(req.params.id)
+		.success(function(resp){
+			console.log(JSON.stringify(resp, null, 4).bold.get)
+	   		res.json({peliculas : resp})
+		})
+}
+
 exports.insert = function(req, res){
 	var pelicula = db.Pelicula.build({nombre: req.body.pelicula.nombre, pais: req.body.pelicula.pais, autor : req.body.pelicula.autor, director : req.body.pelicula.director});
 	console.log('=> POST | Ingresar pelicula'.bold.post);
