@@ -3,10 +3,13 @@ var db = require('../models')
 exports.select = function(req, res){
 	console.log('=> GET | Obtener peliculas'.bold.get);
 	db.Pelicula
-		.findAll()
+		.findAndCountAll({
+			limit : req.query.limit,
+			offset : req.query.offset
+		})
 		.success(function(resp){
-			console.log(JSON.stringify(resp, null, 4).bold.get)
-	   		res.json({peliculas : resp})
+			console.log(JSON.stringify(resp.rows, null, 4).bold.get);
+	   		res.json({peliculas : resp.rows, meta : { total : resp.count}});
 		})
 }
 
@@ -21,6 +24,12 @@ exports.selectOne = function(req, res){
 }
 
 exports.insert = function(req, res){
+	/*
+	var pelicula;
+	for (i=0; i<200; i++){
+		pelicula = db.Pelicula.build({nombre: i, pais: i, autor : i, director : i});
+		pelicula.save();
+	}*/
 	var pelicula = db.Pelicula.build({nombre: req.body.pelicula.nombre, pais: req.body.pelicula.pais, autor : req.body.pelicula.autor, director : req.body.pelicula.director});
 	console.log('=> POST | Ingresar pelicula'.bold.post);
 	pelicula
