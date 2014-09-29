@@ -28,7 +28,7 @@ if(app.get('env') == 'test'){
 }
 
 if(app.get('env') == 'production'){
-	console.log('production');
+	console.log = function(){}
 	app.use(express.static(path.join(__dirname, 'prod')));
 }
 

@@ -8,7 +8,7 @@ App.ApplicationAdapter = DS.RESTAdapter.extend({
 	namespace : 'api'
 });
 
- /*var socket = io.connect('http://localhost:8080')
-socket.on('my_live_stream', function (data) {
-	that.store.push('Pelicula', data.pelicula);
+/*var socket = io.connect('http://localhost:3000')
+	socket.on('api/peliculas', function (data) {
+	console.log(data);
 });*/

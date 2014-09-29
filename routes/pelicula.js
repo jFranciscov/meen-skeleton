@@ -2,15 +2,20 @@ var db = require('../models')
 
 exports.select = function(req, res){
 	console.log('=> GET | Obtener peliculas'.bold.get);
-	db.Pelicula
-		.findAndCountAll({
-			limit : req.query.limit,
-			offset : req.query.offset
-		})
-		.success(function(resp){
-			console.log(JSON.stringify(resp.rows, null, 4).bold.get);
-	   		res.json({peliculas : resp.rows, meta : { total : resp.count}});
-		})
+	/*if (req.query.p){
+			key = Object.keys(req.query.p)[0];
+			val = req.query.p[key];
+	}*/
+		db.Pelicula
+			.findAndCountAll({
+				limit : req.query.limit,
+				offset : req.query.offset,
+				where : req.query.p ? req.query.p : null
+			})
+			.success(function(resp){
+				console.log(JSON.stringify(resp.rows, null, 4).bold.get);
+		   		res.json({peliculas : resp.rows, meta : { total : resp.count}});
+			});
 }
 
 exports.selectOne = function(req, res){

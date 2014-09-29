@@ -46,16 +46,24 @@
     <div class="row">
       <div class="large-12 columns">
         <form class="left">
-            <div class="small-10 columns">
-              <input type="text">
-            </div>
-            <div class="small-2 columns">
-              <a href="#" class="button [tiny small large]">Buscar</a>
-            </div>
+        	<div class="small-4 columns">
+        		{{view Ember.Select
+        			content = columnas
+        			value = selected}}
+        	</div>
+          <div class="small-6 columns">
+            {{input value=buscar}}
+          </div>
+          <div class="small-2 columns">
+            <button {{action 'buscar'}}class="button [tiny small large]">Buscar</a>
+          </div>
         </form>
         {{#link-to 'agregar_pelicula'}}
           <button class="button right">Agregar nueva</button>
         {{/link-to}}
+        <div class="small-12 columns">
+        	{{total}} registros encontrados - {{availablePages}} páginas.
+        </div>
         <table>
           <thead>
             <tr>
@@ -66,24 +74,22 @@
             </tr>
           </thead>
           <tbody>
-          {{#each paginatedContent}}
-          <tr>
-            <td>
-		          {{#link-to 'pelicula' this}}
-		          	{{nombre}}
-          		{{/link-to}}
-            </td>
-            <td>
-              {{pais}}
-            </td>
-            <td>
-              {{autor}}
-            </td>
-            <td>
-              {{director}}
-            </td>
-          </tr>
-          {{/each}}
+	          {{#each paginatedContent}}
+			          {{#link-to 'pelicula' this tagName='tr'}}
+				          <td>
+				          	{{nombre}}
+				          </td>
+			            <td>
+			              {{pais}}
+			            </td>
+			            <td>
+			              {{autor}}
+			            </td>
+			            <td>
+			              {{director}}
+			            </td>
+	          		{{/link-to}}
+	          {{/each}}
           </tbody>
         </table>
       </div>
@@ -100,8 +106,9 @@
                 <li class="arrow unavailable">
                 <a href="">&laquo;</a></li> 
               {{/if}}
+
               {{#each pages}}
-              <li class="active">
+              <li> 
                 <a href="#" {{action "selectPage" page_id}}>
                   {{page_id}}
                 </a>
@@ -123,7 +130,6 @@
 
     <script type="text/x-handlebars" id="pelicula">
     <div class="row">
-    	<h3>Agregar pelicula</h3>
 			<div class="large-8 columns">
 			  <h4>{{input value=nombre placeholder="Nombre"}}</h4>
 			  <h5>{{input value=pais placeholder="País"}}</h5>
@@ -144,6 +150,7 @@
     <script src="js/vendor/handlebars.js"></script>
     <script src="js/vendor/ember.js"></script>
     <script src="js/vendor/ember-data.js"></script>
+    <script src="https://cdn.socket.io/socket.io-1.1.0.js"></script>
     <!--<script src="js/templates.js"></script>-->
     <script src="js/app.js"></script>
     <script src="js/router.js"></script>
@@ -154,5 +161,6 @@
     <script src="js/routes/pelicula_route.js"></script>
     <script src="js/routes/cine_route.js"></script>
     <link rel="stylesheet" type="text/css" href="css/foundation.min.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
   </body>
 </html>

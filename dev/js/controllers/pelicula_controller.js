@@ -46,6 +46,10 @@ Ember.PaginationMixin = Ember.Mixin.create({
 
   }.property('currentPage'),
 
+  total : function(){
+    return this.store.metadataFor(this.get('model').type).total;
+  }.property('content.length'),
+
   availablePages: function() {
     return Math.ceil((this.store.metadataFor(this.get('model').type).total / this.get('itemsPerPage')) || 1);
 
@@ -64,35 +68,44 @@ Ember.PaginationMixin = Ember.Mixin.create({
 
 });
 
-App.PeliculasController = Ember.ArrayController.extend(Ember.PaginationMixin, {        
-    contentLoaded: false,     
-    actions: {      
-	    selectPage: function (number) {
-          this.set('currentPage',number);
-	        var limit = this.get('limit');
-	        var self = this;
-          if(number == 1) number = 0;
+App.PeliculasController = Ember.ArrayController.extend(Ember.PaginationMixin, {         
+  selected : 'nombre',
+  columnas : ['nombre','pais','autor','director'],
 
-	        self.set('contentLoaded', false);
+  actions: {      
+    selectPage: function (number) {
+      this.set('currentPage',number);
+      var limit = this.get('limit');
+      var self = this;
+      if(number == 1) number = 0;
 
-	        this.get('store').findQuery('pelicula',{limit : this.get('itemsPerPage'), offset: number*20 }).then(function (result) {          
-	            self.set('model', result);
-	            //self.set('contentLoaded', true);
-	        });    
-	    }
-    }   
+      this.store.find('pelicula',{limit : this.get('itemsPerPage'), offset: number*20 }).then(function (records) {          
+        self.set('model', records);
+      });    
+    },
+    buscar: function(){
+      var limit = this.get('limit');
+      var self = this;
+      var colBusqueda = this.get('selected');
+      var valBusqueda = this.get('buscar');
+      var query = {};
+      query[colBusqueda] = valBusqueda;
+
+      this.store.find('pelicula',{limit : this.get('itemsPerPage'), offset: 0, p : query }).then(function (records) {          
+        self.set('model', records);
+      }); 
+    }
+  }   
 });
 
 App.PeliculaController = Ember.ObjectController.extend({
 	actions: {
 		guardar: function(){
 			this.get('model').save();
-			this.set('editando', false);
 			this.transitionToRoute('peliculas');
 		},
 		eliminar: function(){
-			var pelicula = this.get('model');
-			pelicula.destroyRecord();
+			this.get('model').destroyRecord();
 			this.transitionToRoute('peliculas');
 		},
     volver: function(){
@@ -111,7 +124,7 @@ App.AgregarPeliculaController = Ember.ObjectController.extend({
 				autor : this.get('autor'),
 				director : this.get('director')
 			});
-			pelicula.save().then();
+			pelicula.save();
 
 			this.transitionToRoute('peliculas');
 		},
