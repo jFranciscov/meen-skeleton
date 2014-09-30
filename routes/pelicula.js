@@ -10,7 +10,7 @@ exports.select = function(req, res){
 			.findAndCountAll({
 				limit : req.query.limit,
 				offset : req.query.offset,
-				where : req.query.p ? req.query.p : null
+				where : req.query.p ? req.query.p : ''
 			})
 			.success(function(resp){
 				console.log(JSON.stringify(resp.rows, null, 4).bold.get);

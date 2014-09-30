@@ -2,6 +2,7 @@
 <html>
   <head>
   	<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   	<title>App - development</title>
   </head>
   <body>
@@ -29,15 +30,17 @@
     <script type="text/x-handlebars" id="agregar_pelicula">
     <div class="row">
         <div class="large-8 columns">
-          <h4>Agregar película</h4>
-          <hr></hr>
-          <h4>{{input value=nombre placeholder="Nombre"}}</h4>
-          <h5>{{input value=pais placeholder="País"}}</h5>
-          <h5>{{input value=autor placeholder="Autor"}}</h5>
-          <h5>{{input value=director placeholder="Director"}}</h5>
-          <hr></hr>
-            <button {{action 'guardar'}}class="button">Guardar</button>
-            <button {{action 'cancelar'}}class="button">Cancelar</button>
+        	<form>
+	          <h4>Agregar película</h4>
+	          <hr></hr>
+	          <h4>{{input value=nombre placeholder="Nombre"}}</h4>
+	          <h5>{{input value=pais placeholder="País"}}</h5>
+	          <h5>{{input value=autor placeholder="Autor"}}</h5>
+	          <h5>{{input value=director placeholder="Director"}}</h5>
+	          <hr></hr>
+	            <button {{action 'guardar'}}class="button">Guardar</button>
+	            <button {{action 'cancelar'}}class="button">Cancelar</button>
+           </form>
         </div>
       </div>
     </script> 
@@ -62,7 +65,7 @@
           <button class="button right">Agregar nueva</button>
         {{/link-to}}
         <div class="small-12 columns">
-        	{{total}} registros encontrados - {{availablePages}} páginas.
+        	{{total}} resultado(s).
         </div>
         <table>
           <thead>
@@ -101,25 +104,39 @@
           <div class="pagination-centered">
             <ul class="pagination">
               {{#if prevPage}}
-                <li class="arrow"><a href="#" {{action "selectPage" prevPage}}>&laquo;</a></li>
+                <li class="arrow"><a href="" {{action "selectPage" prevPage}}>&laquo;</a></li>
               {{else}}
                 <li class="arrow unavailable">
-                <a href="">&laquo;</a></li> 
+                	<a>
+                		&laquo;
+                	</a>
+                </li> 
               {{/if}}
 
               {{#each pages}}
-              <li> 
-                <a href="#" {{action "selectPage" page_id}}>
-                  {{page_id}}
-                </a>
-              </li>
+                {{#if current_page}}
+              		<li class="current"> 
+		                <a href="" {{action "selectPage" page_id}}>
+		                  {{page_id}}
+		                </a>	
+                	</li>
+                {{else}}
+              		<li> 
+		                <a href="" {{action "selectPage" page_id}}>
+		                  {{page_id}}
+		                </a>	
+                	</li>
+                {{/if}}
               {{/each}}
               
               {{#if nextPage}}
-                <li class="arrow"><a href="#" {{action "selectPage" nextPage}}>&raquo;</a></li>
+                <li class="arrow"><a href="" {{action "selectPage" nextPage}}>&raquo;</a></li>
               {{else}}
                 <li class="arrow unavailable">
-                <a href="">&laquo;</a></li> 
+                	<a>
+                		&laquo;
+                	</a>
+                </li> 
               {{/if}}
             </ul>
           </div>
@@ -131,13 +148,15 @@
     <script type="text/x-handlebars" id="pelicula">
     <div class="row">
 			<div class="large-8 columns">
-			  <h4>{{input value=nombre placeholder="Nombre"}}</h4>
-			  <h5>{{input value=pais placeholder="País"}}</h5>
-			  <h5>{{input value=autor placeholder="Autor"}}</h5>
-			  <h5>{{input value=director placeholder="Director"}}</h5>
-			  <button {{action 'volver'}}class="button">Volver</button>
-			  <button {{action 'guardar'}}class="button">Guardar</button>
-			  <button {{action 'eliminar'}}class="button">Eliminar</button>
+				<form>
+				  <h4>{{input value=nombre placeholder="Nombre"}}</h4>
+				  <h5>{{input value=pais placeholder="País"}}</h5>
+				  <h5>{{input value=autor placeholder="Autor"}}</h5>
+				  <h5>{{input value=director placeholder="Director"}}</h5>
+				  <button {{action 'volver'}} type="button" class="button">Volver</button>
+				  <button {{action 'guardar'}} type="submit" class="button">Guardar</button>
+				  <button {{action 'eliminar'}} type="button" class="button">Eliminar</button>
+			  </form>
 			</div>
 		</div>
     </script>
@@ -150,7 +169,6 @@
     <script src="js/vendor/handlebars.js"></script>
     <script src="js/vendor/ember.js"></script>
     <script src="js/vendor/ember-data.js"></script>
-    <script src="https://cdn.socket.io/socket.io-1.1.0.js"></script>
     <!--<script src="js/templates.js"></script>-->
     <script src="js/app.js"></script>
     <script src="js/router.js"></script>

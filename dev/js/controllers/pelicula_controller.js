@@ -10,7 +10,10 @@ Ember.PaginationMixin = Ember.Mixin.create({
 
     for (i = 0; i < availablePages; i++) {
       page = i + 1;
-      pages.push({ page_id: page.toString() });
+      if(page == this.get('currentPage'))
+        pages.push({ page_id: page.toString(), current_page: this.get('currentPage') });
+      else
+        pages.push({ page_id: page.toString()});
     }
 
     return pages;
@@ -26,13 +29,14 @@ Ember.PaginationMixin = Ember.Mixin.create({
   nextPage: function() {
 
     var nextPage = parseInt(this.get('currentPage')) + 1;
+    var availablePages = this.get('availablePages');
 
-    if (nextPage > 0) 
+    if (nextPage <= availablePages)
         return nextPage;
     else
-        return this.get('currentPage');
+        return null;
 
-  }.property('currentPage'),
+  }.property('currentPage', 'availablePages'),
 
   prevPage: function() {
 
@@ -41,7 +45,7 @@ Ember.PaginationMixin = Ember.Mixin.create({
     if (prevPage > 0) {
         return prevPage;
     }else{
-        return this.get('currentPage');
+        return null;
     }
 
   }.property('currentPage'),
@@ -68,23 +72,35 @@ Ember.PaginationMixin = Ember.Mixin.create({
 
 });
 
-App.PeliculasController = Ember.ArrayController.extend(Ember.PaginationMixin, {         
+App.PeliculasController = Ember.ArrayController.extend(Ember.PaginationMixin, { 
+  queryParams : ['page'],
+  // Select view 
   selected : 'nombre',
   columnas : ['nombre','pais','autor','director'],
+  ///
 
   actions: {      
     selectPage: function (number) {
-      this.set('currentPage',number);
-      var limit = this.get('limit');
-      var self = this;
-      if(number == 1) number = 0;
 
-      this.store.find('pelicula',{limit : this.get('itemsPerPage'), offset: number*20 }).then(function (records) {          
+      this.set('currentPage',number);
+      offset = (number - 1) * this.get('itemsPerPage') + 1;
+      if(offset == 1) offset = 0;
+      self = this;
+      colBusqueda = this.get('selected');
+      valBusqueda = this.get('buscar');
+      query = {};
+      query[colBusqueda] = valBusqueda;
+
+      console.log('Pagina anterior' + this.get('prevPage'));
+      console.log('Pagina actual' + this.get('currentPage'));
+      console.log('Pagina siguiente' + this.get('nextPage'));
+
+      this.store.find('pelicula',{limit : this.get('itemsPerPage'), offset: offset, p : query }).then(function (records) {          
         self.set('model', records);
+        self.transitionTo({queryParams : {'page' : number}});
       });    
     },
     buscar: function(){
-      var limit = this.get('limit');
       var self = this;
       var colBusqueda = this.get('selected');
       var valBusqueda = this.get('buscar');
@@ -92,6 +108,7 @@ App.PeliculasController = Ember.ArrayController.extend(Ember.PaginationMixin, {
       query[colBusqueda] = valBusqueda;
 
       this.store.find('pelicula',{limit : this.get('itemsPerPage'), offset: 0, p : query }).then(function (records) {          
+        self.transitionTo({queryParams : {page : 2, nombre : 'a'}});
         self.set('model', records);
       }); 
     }
@@ -124,7 +141,13 @@ App.AgregarPeliculaController = Ember.ObjectController.extend({
 				autor : this.get('autor'),
 				director : this.get('director')
 			});
-			pelicula.save();
+			pelicula
+        .save()
+          .then(function(){
+            console.log('El registro fue guardado!');
+          }).catch(function(e){
+            console.log('Ha ocurrido un error');
+          });
 
 			this.transitionToRoute('peliculas');
 		},
