@@ -73,46 +73,50 @@ Ember.PaginationMixin = Ember.Mixin.create({
 });
 
 App.PeliculasController = Ember.ArrayController.extend(Ember.PaginationMixin, { 
-  queryParams : ['page'],
-  // Select view 
-  selected : 'nombre',
-  columnas : ['nombre','pais','autor','director'],
-  ///
 
-  actions: {      
-    selectPage: function (number) {
+  queryParams: ['page','nombre','pais'],
 
-      this.set('currentPage',number);
-      offset = (number - 1) * this.get('itemsPerPage') + 1;
+  page: 1,
+
+  itemsPerPage: 40,
+
+  offset: function(){
+
+      offset = (this.get('currentPage') - 1) * this.get('itemsPerPage') + 1;
       if(offset == 1) offset = 0;
-      self = this;
-      colBusqueda = this.get('selected');
-      valBusqueda = this.get('buscar');
-      query = {};
-      query[colBusqueda] = valBusqueda;
+      return offset;
 
-      console.log('Pagina anterior' + this.get('prevPage'));
-      console.log('Pagina actual' + this.get('currentPage'));
-      console.log('Pagina siguiente' + this.get('nextPage'));
+  }.property('itemsPerPage','currentPage'),
 
-      this.store.find('pelicula',{limit : this.get('itemsPerPage'), offset: offset, p : query }).then(function (records) {          
-        self.set('model', records);
-        self.transitionTo({queryParams : {'page' : number}});
-      });    
-    },
-    buscar: function(){
-      var self = this;
-      var colBusqueda = this.get('selected');
-      var valBusqueda = this.get('buscar');
-      var query = {};
-      query[colBusqueda] = valBusqueda;
+  selected: 'nombre',
 
-      this.store.find('pelicula',{limit : this.get('itemsPerPage'), offset: 0, p : query }).then(function (records) {          
-        self.transitionTo({queryParams : {page : 2, nombre : 'a'}});
-        self.set('model', records);
-      }); 
+  columnas: ['nombre','pais','autor','director'],
+
+  refresh: function () {
+    if(this.get('page') == 0) this.set('page',1);
+    if (!this.get('isLoaded')) return;
+    this.set('isLoaded',false);
+    this.set('currentPage',this.get('page'));
+
+    colBusqueda = this.get('selected');
+    valBusqueda = this.get('buscar');
+    query = {};
+    query[colBusqueda] = valBusqueda;
+
+    self = this;
+
+    this.store.find('pelicula',{limit : this.get('itemsPerPage'), offset: this.get('offset'), p : query}).then(function (records) {
+      self.set('isLoaded', true);
+      self.set('model', records);
+      self.transitionTo({queryParams : {'page' : self.get('page'), 'nombre' : self.get('nombre')}});
+    });
+  }.observes('page'),
+
+  actions: {
+    selectPage: function(number){
+    this.set('page',number);
     }
-  }   
+  }
 });
 
 App.PeliculaController = Ember.ObjectController.extend({

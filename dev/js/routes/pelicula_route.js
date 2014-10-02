@@ -1,13 +1,13 @@
 App.PeliculasRoute = Ember.Route.extend({
-	model: function(){
-		var controller = this.controllerFor('pelicula');
-	  return this.store.find('pelicula',{ limit : 40, offset: 0 });
-	},   
-
-  setupController: function (controller, model) {
-  	controller.set('model', model);
-    controller.set('itemsPerPage', 40);
-  }  
+	model: function(params){
+		var controller = this.controllerFor('peliculas');
+		controller.set('currentPage', params.page ? params.page : 1);
+	  return this.store.find('pelicula',{ limit : controller.get('itemsPerPage'), offset: controller.get('offset') });
+	},
+	setupController: function(controller, model){
+		controller.set('model',model);
+		controller.set('isLoaded', true);
+	}
 });
 
 App.PeliculaRoute = Ember.Route.extend({
