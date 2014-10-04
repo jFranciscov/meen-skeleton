@@ -2,15 +2,22 @@ var db = require('../models')
 
 exports.select = function(req, res){
 	console.log('=> GET | Obtener peliculas'.bold.get);
-	/*if (req.query.p){
-			key = Object.keys(req.query.p)[0];
-			val = req.query.p[key];
-	}*/
+	
+	query = {};
+	if(req.query.nombre)
+		query['nombre'] = req.query.nombre;
+	if(req.query.pais)
+		query['pais'] = req.query.pais;
+	if(req.query.autor)
+		query['autor'] = req.query.autor;
+	if(req.query.director)
+		query['director'] = req.query.director;
+
 		db.Pelicula
 			.findAndCountAll({
 				limit : req.query.limit,
 				offset : req.query.offset,
-				where : req.query.p ? req.query.p : ''
+				where : query
 			})
 			.success(function(resp){
 				console.log(JSON.stringify(resp.rows, null, 4).bold.get);

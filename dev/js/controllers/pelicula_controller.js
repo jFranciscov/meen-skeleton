@@ -17,13 +17,11 @@ Ember.PaginationMixin = Ember.Mixin.create({
     }
 
     return pages;
-
   }.property('availablePages'),
 
   currentPage: function() {
 
     return parseInt(this.get('selectedPage'), 10) || 1;
-
   }.property('selectedPage'),
 
   nextPage: function() {
@@ -35,7 +33,6 @@ Ember.PaginationMixin = Ember.Mixin.create({
         return nextPage;
     else
         return null;
-
   }.property('currentPage', 'availablePages'),
 
   prevPage: function() {
@@ -47,7 +44,6 @@ Ember.PaginationMixin = Ember.Mixin.create({
     }else{
         return null;
     }
-
   }.property('currentPage'),
 
   total : function(){
@@ -56,7 +52,6 @@ Ember.PaginationMixin = Ember.Mixin.create({
 
   availablePages: function() {
     return Math.ceil((this.store.metadataFor(this.get('model').type).total / this.get('itemsPerPage')) || 1);
-
   }.property('content.length'),
 
   paginatedContent: function() {
@@ -67,54 +62,52 @@ Ember.PaginationMixin = Ember.Mixin.create({
     var models = this.get('content');
 
     return models.slice(lowerBound, upperBound);
-
   }.property('selectedPage', 'content.@each')
-
 });
 
 App.PeliculasController = Ember.ArrayController.extend(Ember.PaginationMixin, { 
 
-  queryParams: ['page','nombre','pais'],
-
-  page: 1,
-
+  queryParams:  ['page','nombre','pais','autor','director'],
+  page:         1,
+  nombre:       undefined,
+  pais:         undefined,
+  autor:        undefined,
+  director:     undefined,
   itemsPerPage: 40,
+
+  selected: 'nombre',
+
+  columnas: ['nombre','pais','autor','director'],
 
   offset: function(){
 
       offset = (this.get('currentPage') - 1) * this.get('itemsPerPage') + 1;
       if(offset == 1) offset = 0;
       return offset;
-
   }.property('itemsPerPage','currentPage'),
 
-  selected: 'nombre',
-
-  columnas: ['nombre','pais','autor','director'],
-
-  refresh: function () {
-    if(this.get('page') == 0) this.set('page',1);
-    if (!this.get('isLoaded')) return;
-    this.set('isLoaded',false);
-    this.set('currentPage',this.get('page'));
-
-    colBusqueda = this.get('selected');
-    valBusqueda = this.get('buscar');
-    query = {};
-    query[colBusqueda] = valBusqueda;
-
-    self = this;
-
-    this.store.find('pelicula',{limit : this.get('itemsPerPage'), offset: this.get('offset'), p : query}).then(function (records) {
-      self.set('isLoaded', true);
-      self.set('model', records);
-      self.transitionTo({queryParams : {'page' : self.get('page'), 'nombre' : self.get('nombre')}});
-    });
-  }.observes('page'),
-
   actions: {
+
+    // Se cambia la pagina con alguno de los botones
     selectPage: function(number){
-    this.set('page',number);
+      this.set('page',number);
+    },
+
+    // Se realiza una busqueda con el formulario de la pagina
+    search: function(){
+      this.set('nombre', undefined);
+      this.set('pais', undefined);
+      this.set('autor', undefined);
+      this.set('director', undefined);
+      this.set('page',1);
+      if(this.get('selected') == 'nombre' && this.get('buscar') != '')
+        this.set('nombre', this.get('buscar'));
+      if(this.get('selected') == 'pais' && this.get('buscar') != '')
+        this.set('pais', this.get('buscar'));
+      if(this.get('selected') == 'autor' && this.get('buscar') != '')
+        this.set('autor', this.get('buscar'));
+      if(this.get('selected') == 'director' && this.get('buscar') != '')
+        this.set('director', this.get('buscar'));
     }
   }
 });
