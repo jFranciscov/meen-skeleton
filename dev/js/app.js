@@ -1,4 +1,8 @@
 App = Ember.Application.create({
+  name: 'authentication',
+  initialize: function(container, application) {
+    Ember.SimpleAuth.setup(container, application);
+  },
 	LOG_TRANSITIONS: true
 });
 

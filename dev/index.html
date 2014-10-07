@@ -6,25 +6,29 @@
   	<title>App - development</title>
   </head>
   <body>
-    <script type="text/x-handlebars">
-      <header>
-       <div class="row">
-        <h2>Ejemplo</h2>
-        <h4>Mysql - Express - Ember - Node</h4>
-       </div>
-      <hr>
-      </hr>
-      <div class="row">
-        <ul class="inline-list">
-          <li><a href="#">Inicio</a></li>
-          <li>{{#link-to 'peliculas'}}Peliculas{{/link-to}}</li>
-          <li>{{#link-to 'cines'}}Cines{{/link-to}}</li>
+  <script type="text/x-handlebars">
+    <div class="fixed">
+      <nav class="top-bar" data-topbar role="navigation"> 
+        <ul class="title-area"> 
+          <li class="name">
+            <h1><a href="#">App</a></h1> 
+          </li>
+          <li class="toggle-topbar menu-icon">
+            <a href="#"><span></span></a>
+          </li>
         </ul>
-        <hr>
-        </hr>
-      </div>
-      </header>
-      {{outlet}}
+        <section class="top-bar-section">
+          <ul class="right">
+            <li>{{#link-to 'peliculas'}}Peliculas{{/link-to}}</li>
+            <li>{{#link-to 'cines'}}Cines{{/link-to}}</li>
+          </ul>
+        </section>
+      </nav>
+    </div>
+    <hr></hr>
+    <hr></hr>
+    {{outlet}}
+
     </script>
 
     <script type="text/x-handlebars" id="agregar_pelicula">
@@ -54,8 +58,15 @@
         			content = columnas
         			value = selected}}
         	</div>
-          <div class="small-6 columns">
+          <div class="small-2 columns">
+            {{view Ember.Select
+              content = signos
+              value = signoSelected
+            }}
+          </div>
+          <div class="small-4 columns" class="">
             {{input value=buscar}}
+            {{input type="checkbox" checked=esRecursiva}} <small>Busqueda recursiva?</small>
           </div>
           <div class="small-2 columns">
             <button {{action 'search'}}class="button [tiny small large]">Buscar</a>
@@ -149,7 +160,7 @@
     <div class="row">
 			<div class="large-8 columns">
 				<form>
-				  <h4>{{input value=nombre placeholder="Nombre"}}</h4>
+				  <h2>{{input value=nombre placeholder="Nombre"}}</h2>
 				  <h5>{{input value=pais placeholder="País"}}</h5>
 				  <h5>{{input value=autor placeholder="Autor"}}</h5>
 				  <h5>{{input value=director placeholder="Director"}}</h5>
@@ -169,6 +180,7 @@
     <script src="js/vendor/handlebars.js"></script>
     <script src="js/vendor/ember.js"></script>
     <script src="js/vendor/ember-data.js"></script>
+    <script src="js/vendor/ember-simple-auth.js"></script>
     <!--<script src="js/templates.js"></script>-->
     <script src="js/app.js"></script>
     <script src="js/router.js"></script>

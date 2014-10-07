@@ -67,24 +67,35 @@ Ember.PaginationMixin = Ember.Mixin.create({
 
 App.PeliculasController = Ember.ArrayController.extend(Ember.PaginationMixin, { 
 
-  queryParams:  ['page','nombre','pais','autor','director'],
+  queryParams:  ['page','q1','q2','q3'], // Parametros de la URL
+  q1: 				[], // Campo de la consulta
+  q2: 				[], // Operacion de la consulta
+  q3: 				[], // Valor a buscar en la consulta
   page:         1,
-  nombre:       undefined,
-  pais:         undefined,
-  autor:        undefined,
-  director:     undefined,
   itemsPerPage: 40,
 
-  selected: 'nombre',
+  esRecursiva : false,
 
+  selected: 'nombre',
+  signoSelected: '=/=',
+
+  signos: ['=/=', '<', '>', '<=', '>=', '!='],
   columnas: ['nombre','pais','autor','director'],
 
   offset: function(){
 
-      offset = (this.get('currentPage') - 1) * this.get('itemsPerPage') + 1;
+      offset = (this.get('currentPage') - 1) * this.get('itemsPerPage');
       if(offset == 1) offset = 0;
       return offset;
   }.property('itemsPerPage','currentPage'),
+
+  cambiaRecursiva: function(){
+  	if(this.get('esRecursiva'))
+  		this.set('esRecursiva', true);
+  	else
+  		this.set('esRecursiva', false);
+  	console.log(this.get('esRecursiva'));
+  }.observes('esRecursiva'),
 
   actions: {
 
@@ -93,21 +104,17 @@ App.PeliculasController = Ember.ArrayController.extend(Ember.PaginationMixin, {
       this.set('page',number);
     },
 
-    // Se realiza una busqueda con el formulario de la pagina
+    // Se envia el formulario de busqueda
     search: function(){
-      this.set('nombre', undefined);
-      this.set('pais', undefined);
-      this.set('autor', undefined);
-      this.set('director', undefined);
-      this.set('page',1);
-      if(this.get('selected') == 'nombre' && this.get('buscar') != '')
-        this.set('nombre', this.get('buscar'));
-      if(this.get('selected') == 'pais' && this.get('buscar') != '')
-        this.set('pais', this.get('buscar'));
-      if(this.get('selected') == 'autor' && this.get('buscar') != '')
-        this.set('autor', this.get('buscar'));
-      if(this.get('selected') == 'director' && this.get('buscar') != '')
-        this.set('director', this.get('buscar'));
+    	if(!this.get('esRecursiva')){
+    		this.set('q1',[]);
+    		this.set('q2',[]);
+    		this.set('q3',[]);
+    	}
+    	this.set('page', 1);
+    	this.q1.pushObject(this.get('selected'));
+    	this.q2.pushObject(this.get('signoSelected'));
+    	this.q3.pushObject(this.get('buscar'));
     }
   }
 });

@@ -4,16 +4,13 @@ App.PeliculasRoute = Ember.Route.extend({
 		page: {
 			refreshModel: true
 		},
-		nombre: {
+		q1: {
 			refreshModel: true
 		},
-		pais: {
+		q2: {
 			refreshModel: true
 		},
-		autor: {
-			refreshModel: true
-		},
-		director: {
+		q3: {
 			refreshModel: true
 		}
 	},
@@ -21,12 +18,13 @@ App.PeliculasRoute = Ember.Route.extend({
 	model: function(params){
 		var controller = this.controllerFor('peliculas');
 		controller.set('currentPage', params.page ? params.page : 1);
-	  return this.store.find('pelicula',{ limit : controller.get('itemsPerPage'), offset: controller.get('offset'), nombre: params.nombre, pais: params.pais, autor: params.autor, director: params.director});
+	  return this.store.find('pelicula',{ limit : controller.get('itemsPerPage'), offset: controller.get('offset'), q1 : params.q1, q2 : params.q2, q3 : params.q3,});
 	},
-	setupController: function(controller, model, queryParams){
+	setupController: function(controller, model, params){
 		controller.set('model',model);
-		controller.set('selected', queryParams.queryParams.nombre ? 'nombre' : (queryParams.queryParams.pais ? 'pais' : (queryParams.queryParams.autor ? 'autor' : (queryParams.queryParams.director ? 'director' : 'nombre'))));
-		controller.set('buscar', queryParams.queryParams.nombre ? queryParams.queryParams.nombre : (queryParams.queryParams.pais ? queryParams.queryParams.pais : (queryParams.queryParams.autor ? queryParams.queryParams.autor : (queryParams.queryParams.director ? queryParams.queryParams.director : ''))))
+		// Asignar a selected, signoSelect, y buscar el ultimo elemento del array de query, que seria el ultimo buscado
+		//controller.set('selected', params.queryParams.nombre ? 'nombre' : (params.queryParams.pais ? 'pais' : (params.queryParams.autor ? 'autor' : (params.queryParams.director ? 'director' : 'nombre'))));
+		//controller.set('buscar', params.queryParams.nombre ? params.queryParams.nombre : (params.queryParams.pais ? params.queryParams.pais : (params.queryParams.autor ? params.queryParams.autor : (params.queryParams.director ? params.queryParams.director : ''))))
 	}
 });
 
