@@ -68,13 +68,13 @@ Ember.PaginationMixin = Ember.Mixin.create({
 App.PeliculasController = Ember.ArrayController.extend(Ember.PaginationMixin, { 
 
   queryParams:  ['page','q1','q2','q3'], // Parametros de la URL
-  q1: 				[], // Campo de la consulta
-  q2: 				[], // Operacion de la consulta
-  q3: 				[], // Valor a buscar en la consulta
+  q1: 					[], // Campo de la consulta
+  q2: 					[], // Operacion de la consulta
+  q3: 					[], // Valor a buscar en la consulta
   page:         1,
   itemsPerPage: 40,
 
-  esRecursiva : false,
+  esRecursiva: 	false,
 
   selected: 'nombre',
   signoSelected: '=/=',

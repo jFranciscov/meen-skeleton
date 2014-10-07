@@ -5,10 +5,10 @@ exports.select = function(req, res){
 
 	var query;
 	if(req.query.q1 != null){
-		query = req.query.q1[0] + ' ' + (req.query.q2[0] == '=/=' ? 'LIKE  "%' + req.query.q3[0] + '%"': req.query.q2[0] + ' ' + req.query.q3[0]);
+		query = req.query.q1[0] + ' ' + (req.query.q2[0] == '=/=' ? 'LIKE  "%' + req.query.q3[0] + '%"': req.query.q2[0] + ' "' + req.query.q3[0] +'"');
 		if(req.query.q1.length > 1)
 			for (i=1; i< req.query.q1.length; i++)
-				query = query + ' AND ' + req.query.q1[i] + ' ' + (req.query.q2[i] == '=/=' ? 'LIKE  "%' + req.query.q3[i] + '%"': req.query.q2[i] + ' ' + req.query.q3[i]);
+				query = query + ' AND ' + req.query.q1[i] + ' ' + (req.query.q2[i] == '=/=' ? 'LIKE  "%' + req.query.q3[i] + '%"': req.query.q2[i] + ' "' + req.query.q3[i] + '"');
 	}
 
 		db.Pelicula
