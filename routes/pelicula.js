@@ -2,20 +2,23 @@ var db = require('../models')
 
 exports.select = function(req, res){
 	console.log('=> GET | Obtener peliculas'.bold.get);
-
+	var sorting;
+	if(req.query.sortBy != null)
+		sorting = req.query.sortBy + ' ' + req.query.sortType;
 	var query;
 	if(req.query.q1 != null){
-		query = req.query.q1[0] + ' ' + (req.query.q2[0] == '=/=' ? 'LIKE  "%' + req.query.q3[0] + '%"': req.query.q2[0] + ' "' + req.query.q3[0] +'"');
+		query = req.query.q1[0] + ' ' + (req.query.q2[0] == '±' ? 'LIKE  "%' + req.query.q3[0] + '%"': req.query.q2[0] + ' "' + req.query.q3[0] +'"');
 		if(req.query.q1.length > 1)
 			for (i=1; i< req.query.q1.length; i++)
-				query = query + ' AND ' + req.query.q1[i] + ' ' + (req.query.q2[i] == '=/=' ? 'LIKE  "%' + req.query.q3[i] + '%"': req.query.q2[i] + ' "' + req.query.q3[i] + '"');
+				query = query + ' AND ' + req.query.q1[i] + ' ' + (req.query.q2[i] == '±' ? 'LIKE  "%' + req.query.q3[i] + '%"': req.query.q2[i] + ' "' + req.query.q3[i] + '"');
 	}
 
 		db.Pelicula
 			.findAndCountAll({
 				limit: req.query.limit,
 				offset: req.query.offset,
-				where : query
+				where: query,
+				order: sorting,
 			})
 			.success(function(resp){
 				//console.log(JSON.stringify(resp.rows, null, 4).bold.get);

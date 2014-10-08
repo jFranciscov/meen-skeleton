@@ -67,23 +67,21 @@ Ember.PaginationMixin = Ember.Mixin.create({
 
 App.PeliculasController = Ember.ArrayController.extend(Ember.PaginationMixin, { 
 
-  queryParams:  ['page','q1','q2','q3'], // Parametros de la URL
-  q1: 					[], // Campo de la consulta
-  q2: 					[], // Operacion de la consulta
-  q3: 					[], // Valor a buscar en la consulta
-  page:         1,
-  itemsPerPage: 40,
-
-  esRecursiva: 	false,
-
-  selected: 'nombre',
-  signoSelected: '=/=',
-
-  signos: ['=/=', '<', '>', '<=', '>=', '!='],
-  columnas: ['nombre','pais','autor','director'],
+  queryParams:  	['page', 'q1', 'q2', 'q3', 'sortType', 'sortBy'], // Parametros de la URL
+  q1: 						[], // Campo de la consulta
+  q2: 						[], // Operacion de la consulta
+  q3: 						[], // Valor a buscar en la consulta
+  sortBy: 				'nombre',
+  sortType: 			'ASC', 
+  page:         	1,
+  itemsPerPage: 	40,
+  esRecursiva: 		false,
+  selected: 			'Nombre',
+  signoSelected: 	'±',
+  signos: 				['±', '<', '>', '<=', '>=', '!='],
+  columnas: 			['Nombre','Pais','Autor','Director'],
 
   offset: function(){
-
       offset = (this.get('currentPage') - 1) * this.get('itemsPerPage');
       if(offset == 1) offset = 0;
       return offset;
@@ -106,15 +104,31 @@ App.PeliculasController = Ember.ArrayController.extend(Ember.PaginationMixin, {
 
     // Se envia el formulario de busqueda
     search: function(){
-    	if(!this.get('esRecursiva')){
+    	// Si la busqueda no es recursiva se eliminan los filtros previos
+    	if(!this.get('esRecursiva') || (this.get('esRecursiva') && this.get('buscar') == '')){ 
     		this.set('q1',[]);
     		this.set('q2',[]);
     		this.set('q3',[]);
     	}
     	this.set('page', 1);
+    	// En los arrays se guardan: campo, signo y valor a buscar.
     	this.q1.pushObject(this.get('selected'));
     	this.q2.pushObject(this.get('signoSelected'));
     	this.q3.pushObject(this.get('buscar'));
+    },
+
+    // Se cambia el valor de ordenamiento
+    sorting: function(row){
+    	this.set('page', 1);
+    	if(this.get('sortBy') == row){
+    		if(this.get('sortType') == 'ASC')
+    			this.set('sortType','DESC');
+    		else
+    			this.set('sortType','ASC');
+    	}else{
+    		this.set('sortBy',row);
+    		this.set('sortType','ASC');
+    	}
     }
   }
 });
